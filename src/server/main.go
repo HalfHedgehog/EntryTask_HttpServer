@@ -65,7 +65,6 @@ func login(c *gin.Context) {
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
 		//global.Logger.WithFields(logrus.Fields{"req": c.Request.Body}).Info()
-		global.Logger.Errorln("登陆参数校验错误")
 		c.JSON(500, r.Error("参数错误", nil))
 		return
 	}
@@ -135,6 +134,7 @@ func updateUser(c *gin.Context) {
 	}
 	res, err := global.UserRpcClient.UpdateUserInfo(context.Background(), &rpcReq)
 	if err != nil {
+		global.Logger.WithFields(logrus.Fields{"ErrorMsq": err}).Errorln("rpc请求异常！")
 		c.JSON(500, r.DefaultError())
 		return
 	}
